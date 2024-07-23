@@ -22,10 +22,9 @@ public class Client implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long codigo;
+  private Long id;
   private String nome;
   private Integer idade;
   private String cidade;
-
 
 }
