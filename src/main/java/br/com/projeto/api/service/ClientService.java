@@ -55,11 +55,9 @@ public class ClientService {
   public void deleteById(Long id) {
     try {
       repository.deleteById(id);
-    }
-    catch (EntityNotFoundException e) {
+    } catch (EntityNotFoundException e) {
       throw new ResourceNotFoundException("Id " + id + " não encontrado!");
-    }
-    catch (DataIntegrityViolationException e) {
+    } catch (DataIntegrityViolationException e) {
       throw new DatabaseException("Integrity Violation");
     }
   }

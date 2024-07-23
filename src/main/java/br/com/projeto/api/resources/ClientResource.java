@@ -6,6 +6,7 @@ import java.util.Optional;
 import br.com.projeto.api.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.projeto.api.entity.Client;
-import br.com.projeto.api.repository.ClientRepository;
 import br.com.projeto.api.service.ClientService;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class ClientResource {
 
   @Autowired
@@ -60,7 +61,7 @@ public class ClientResource {
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     try {
       Optional<Client> client = service.findById(id);
-      if(client != null) {
+      if (client != null) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
       }
