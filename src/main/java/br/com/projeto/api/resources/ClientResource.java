@@ -25,7 +25,7 @@ public class ClientResource {
   @Autowired
   private ClientService service;
 
-  @PostMapping("/cadastrar")
+  @PostMapping("cliente")
   public ResponseEntity<Client> create(@RequestBody Client cliente) {
     Client obj = service.save(cliente);
     URI uri = ServletUriComponentsBuilder
@@ -34,19 +34,13 @@ public class ClientResource {
     return ResponseEntity.created(uri).body(obj);
   }
 
-  @GetMapping("/listar")
+  @GetMapping("clientes")
   public ResponseEntity<Iterable<Client>> findAll() {
     Iterable<Client> list = service.findAll();
     return ResponseEntity.ok().body(list);
   }
 
-  @GetMapping("/buscar/{id}")
-  public ResponseEntity<Optional<Client>> findById(@PathVariable Long id) {
-    Optional<Client> client = service.findById(id);
-    return client != null ? ResponseEntity.ok().body(client) : ResponseEntity.notFound().build();
-  }
-
-  @PutMapping("/editar/{id}")
+  @PutMapping("cliente/{id}")
   public ResponseEntity<Client> update(@PathVariable Long id, @RequestBody Client cliente) {
     try {
       Client updatedClient = service.update(id, cliente);
@@ -56,10 +50,23 @@ public class ClientResource {
     }
   }
 
+  @GetMapping("cliente/{id}")
+  public ResponseEntity<Optional<Client>> findById(@PathVariable Long id) {
+    Optional<Client> client = service.findById(id);
+    return client != null ? ResponseEntity.ok().body(client) : ResponseEntity.notFound().build();
+  }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("cliente/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
-    service.deleteById(id);
-    return ResponseEntity.noContent().build();
+    try {
+      Optional<Client> client = service.findById(id);
+      if(client != null) {
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
+      }
+      return ResponseEntity.notFound().build();
+    } catch (ResourceNotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 }
